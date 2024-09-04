@@ -175,11 +175,14 @@ organize_final_df <- function(all_df) {
 		focal_df <- all_df[all_df$dataset==focal_dataset,]
 		focal_df$delta_AICc <- focal_df$AICc-min(focal_df$AICc)
 		focal_df$data_mean <- mean(focal_df$data_mean, na.rm=TRUE)
+		focal_df$ntax <- mean(focal_df$ntax, na.rm=TRUE)
+		focal_df$treeheight <- mean(focal_df$treeheight, na.rm=TRUE)
 		final_df <- rbind(final_df, focal_df)
 	}
 	final_df$tip_fog_as_fraction_trait_mean <- final_df$tip_fog_as_sd / final_df$data_mean
+	final_df$fog[final_df$model=="white"] <- "only"
 
 	final_df$tip_variance_divided_by_tree_plus_tip_variance <- final_df$sigma.sq.me / (final_df$expected_tip_variance_along_tree + final_df$sigma.sq.me)
-	final_df <- final_df |> arrange(dataset, AICc) |> select(dataset, model, fog, program, delta_AICc, tip_fog_as_fraction_trait_mean, tip_variance_divided_by_tree_plus_tip_variance, sigma.sq, sigma.sq.me, other_param)
+	final_df <- final_df |> arrange(dataset, AICc) |> select(dataset, model, fog, program, delta_AICc, tip_fog_as_fraction_trait_mean, tip_variance_divided_by_tree_plus_tip_variance, sigma.sq, sigma.sq.me, other_param, ntax, treeheight)
 	return(final_df)
 }
